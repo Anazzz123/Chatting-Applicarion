@@ -1,0 +1,14 @@
+# Use an official Java runtime as a parent image
+FROM openjdk:17
+
+# Set the working directory in the container
+WORKDIR /app
+
+# Copy the client source code into the container
+COPY src/chatting/Client.java /app
+
+# Compile the client application
+RUN javac -d bin src/chatting/*.java
+
+# Run the client when the container launches
+CMD ["java", "Client"]

@@ -1,0 +1,39 @@
+# Use an official Debian base image
+FROM debian:bullseye-slim
+
+# Install necessary libraries for X11 support and utilities
+RUN apt-get update && apt-get install -y \
+    xorg \
+    x11-apps \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install the default JDK (Java Development Kit)
+RUN apt-get update && apt-get install -y default-jdk
+
+# Set the working directory in the container
+WORKDIR /app
+
+# Copy the server source code into the container
+COPY src/chatting/Server.java /app/src/chatting/
+
+# Create a directory for compiled class files
+RUN mkdir bin
+
+# Compile the server application using the installed JDK
+RUN javac -d bin src/chatting/*.java
+
+# Set the DISPLAY environment variable to the X11 display server
+ENV DISPLAY=:99
+
+# Run the X11 application when the container launches
+CMD ["java", "-cp", "/app/bin", "chatting.Server"]
+
+
+
+
+
+
+
+
+
+
